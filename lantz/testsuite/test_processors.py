@@ -2,7 +2,7 @@
 import unittest
 import doctest
 
-from lantz import Q_
+from lantz import Q_, PY2
 
 import lantz.processors as processors
 
@@ -44,5 +44,11 @@ class TestProcessors(unittest.TestCase):
 
         self.assertRaises(ValueError, processors.convert_to(V, on_dimensionless='raise'), 1000)
 
+if PY2:
+    def assertWarns(self, *args):
+        return True
+    TestProcessors.assertWarns = assertWarns
+    
+    
 if __name__ == '__main__':
     unittest.main()

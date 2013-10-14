@@ -9,6 +9,9 @@ except ImportError:
 import os
 import codecs
 
+from lib3to2.build import build_py_3to2
+cmdclass = {'build_py': build_py_3to2}
+
 
 def read(filename):
     return codecs.open(filename, encoding='utf-8').read()
@@ -39,6 +42,7 @@ setup(name='Lantz',
       packages=['lantz',
                 'lantz.ui',
                 'lantz.simulators',
+                'lantz.testsuite',
                 'lantz.drivers'] +
                ['lantz.drivers.' + company for company in companies],
       test_suite='lantz.testsuite.testsuite',
@@ -46,6 +50,7 @@ setup(name='Lantz',
                         'stringparser',
                        ],
       zip_safe=False,
+      cmdclass=cmdclass,
       platforms='any',
       extra_require={'colorama':  ['colorama'],
                      'numpy': ['numpy'],

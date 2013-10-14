@@ -224,7 +224,18 @@ class LibraryDriver(Driver):
         try:
             ret = func(*new_args)
         except Exception as e:
-            raise Exception('While calling {} with {} (was {}): {}'.format(name, new_args, args, e))
+            # handle dlls created with mingw on windows
+            if str(e).startswith('Procedure probably called with too many arguments'):
+                try:
+                    temp = ctypes.CDLL(self.lib.library_name)
+                    func = getattr(temp, name)
+                    ret = func(*new_args)
+                except Exception as e:
+                    raise Exception(u'While calling {} with {} (was {}): {}'.format(name, new_args, args, e))
+                else:
+                    self.lib.internal = temp
+            else:
+                raise Exception(u'While calling {} with {} (was {}): {}'.format(name, new_args, args, e))
 
         ret = self._return_handler(name, ret)
 

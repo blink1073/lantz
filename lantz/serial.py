@@ -9,7 +9,7 @@
     :copyright: 2012 by Lantz Authors, see AUTHORS for more details.
     :license: BSD, see LICENSE for more details.
 """
-
+from __future__ import absolute_import
 import serial
 
 from . import Driver

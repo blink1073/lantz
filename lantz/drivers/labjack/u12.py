@@ -12,7 +12,7 @@ from lantz import Feat, Action, DictFeat
 from lantz import Driver
 from lantz.errors import InstrumentError
 
-from _internal import u12 as _u12
+from ._internal import u12 as _u12
 
 class U12(Driver):
     """

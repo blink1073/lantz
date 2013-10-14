@@ -13,7 +13,9 @@
     :copyright: 2013 by Lantz Authors, see AUTHORS for more details.
     :license: BSD, see LICENSE for more details.
 """
+from __future__ import absolute_import
 
+import sys
 from collections import namedtuple, OrderedDict
 from fnmatch import fnmatch
 
@@ -398,9 +400,13 @@ class USBDriver(Driver):
         return usb.util.dispose_resources(self.usb_dev)
 
 
-def _patch_endpoint(ep, log_func=print):
+def _patch_endpoint(ep, log_func=None):
     _read = ep.read
     _write = ep.write
+    if not log_func:
+        def log_func(*args):
+            string = ' '.join([repr(arg) for arg in args])
+            sys.stdout.write(string + '\n')
     def new_read(*args, **kwargs):
         log_func('---')
         log_func('reading from {}'.format(ep.bEndpointAddress))

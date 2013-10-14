@@ -17,6 +17,7 @@ import os
 import imp
 import sys
 
+from lantz import PY2
 
 class ReplaceImport(object):
     """Hook that replace imports of a package by another.
@@ -34,6 +35,9 @@ class ReplaceImport(object):
             fullname = self.new + fullname[len(self.old):]
             self.mod_data = imp.find_module(fullname)
             return self
+        elif PY2 and fullname.startswith(self.old):
+            fullname = self.new + fullname[len(self.old):]
+            __import__(fullname)
         return None
 
     def load_module(self, fullname):
@@ -68,6 +72,11 @@ except KeyError:
 # Create hook and register it.
 _QtHook = ReplaceImport('Qt', qtbindings)
 _QtHook.register()
+
+if PY2:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 
 # If PyQt4 bindings are used, patch them.
 if qtbindings == 'PyQt4':

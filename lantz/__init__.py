@@ -12,6 +12,7 @@
 
 import os
 import subprocess
+import sys
 import pkg_resources
 
 __version__ = "unknown"
@@ -28,6 +29,7 @@ except:  # on any error just try to grab the version that is installed on the sy
 
 from pint import UnitRegistry
 Q_ = UnitRegistry().Quantity
+PY2 = sys.version[0] == '2'
 
 from .log import LOGGER
 from .driver import Driver, Feat, DictFeat, Action, initialize_many, finalize_many

@@ -21,9 +21,10 @@ import threading
 from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 from logging.handlers import SocketHandler, DEFAULT_TCP_LOGGING_PORT, DEFAULT_UDP_LOGGING_PORT
 
+from lantz import PY2
+
 from socketserver import (ThreadingUDPServer, DatagramRequestHandler,
                           ThreadingTCPServer, StreamRequestHandler)
-
 
 from stringparser import Parser
 
@@ -48,8 +49,11 @@ def _makeRecord(name, level, fn, lno, msg, args, exc_info,
     A factory method which can be overridden in subclasses to create
     specialized LogRecords.
     """
-    rv = _LogRecord(name, level, fn, lno, msg, args, exc_info, func,
-                    sinfo)
+    if PY2:
+        rv = _LogRecord(name, level, fn, lno, msg, args, exc_info, func)
+    else:
+        rv = _LogRecord(name, level, fn, lno, msg, args, exc_info, func,
+                        sinfo)
     if extra is not None:
         for key in extra:
             if (key in ["message", "asctime"]) or (key in rv.__dict__):

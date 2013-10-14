@@ -177,7 +177,7 @@ class Driver(metaclass=_DriverType):
 
     def __new__(cls, *args, **kwargs):
         name = kwargs.pop('name', None)
-        new_meth = super(Driver, cls).__new__
+        new_meth = super().__new__
         if new_meth is object.__new__:
             inst = new_meth(cls)
         else:

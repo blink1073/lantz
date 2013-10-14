@@ -1,7 +1,7 @@
 import logging
 import unittest
 
-from lantz import Driver, DictFeat, Q_
+from lantz import Driver, DictFeat, Q_, PY2
 
 
 from lantz.log import get_logger
@@ -11,7 +11,10 @@ class MemHandler(logging.Handler):
 
     def __init__(self):
         super().__init__()
-        self.setFormatter(logging.Formatter(style='{'))
+        if PY2:
+            self.setFormatter(logging.Formatter())
+        else:
+            self.setFormatter(logging.Formatter(style='{'))
         self.history = list()
 
     def emit(self, record):
